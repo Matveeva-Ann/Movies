@@ -1,29 +1,36 @@
 import { Dispatch, SetStateAction } from 'react';
 import { generateStars } from '../../utils/generateStars';
 import FilterSelect from '../FilterSelect/FilterSelect';
+import { useDispatch, useSelector } from 'react-redux';
+import { ParamsState, ratingParams } from '../../redux/paramsSlice';
 
 interface FilterRatingProps {
   setSearchParams: Dispatch<SetStateAction<object>>;
+  isRatingOpen: boolean;
+  setIsRatingOpen: ()=>void;
 }
 
-export default function FilterRating({setSearchParams}: FilterRatingProps) {
+export default function FilterRating({setSearchParams, setIsRatingOpen, isRatingOpen}: FilterRatingProps) {
+  const selectedRating = useSelector((state: ParamsState)=> state.rating);
+  const dispatch =useDispatch();
 
   const handleCheckboxChange = (e: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(e.currentTarget);
     const formDataValues = Object.values(Object.fromEntries(formData));   
-    setSearchParams(prevState => ({...prevState, rating: formDataValues}))
+    setSearchParams(prevState => ({...prevState, rating: formDataValues}));  
+    dispatch(ratingParams(formDataValues))
   };
 
   return (
-    <FilterSelect selectName="Rating" >
+    <FilterSelect selectName="Rating" isOpen={isRatingOpen} setIsOpen={setIsRatingOpen}>
       <form id='ratingForm' onChange={(e)=>handleCheckboxChange(e)}>
           <div>
-            <input type="checkbox" id='checkbox' value='any'/>
+            <input type="checkbox" id='checkbox' name='any' value='any' defaultChecked={selectedRating?.includes('any')}/>
             <label htmlFor='checkbox'>Any rating</label>
           </div>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => (
           <div key={item}>
-            <input type="checkbox" id={`checkbox-${item}`} name={`checkbox-${item}`} value={item}/>
+            <input type="checkbox" id={`checkbox-${item}`} name={`checkbox-${item}`} value={item} defaultChecked={selectedRating?.includes(String(item))}/>
             <label htmlFor={`checkbox-${item}`}>{generateStars(item)}</label>
           </div>
         ))}

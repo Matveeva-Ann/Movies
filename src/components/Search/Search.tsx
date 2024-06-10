@@ -22,14 +22,13 @@ export default function Search({ searchParams }: SearchProps) {
   const refInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-      fetchMovies();
+    fetchMovies();
   }, [isInFocus]);
 
   async function fetchMovies() {
     try {
       const data = await getMovies();
       setMovies(data);
-      setFilteredMovies(data);
     } catch (e) {
       console.log(e);
     }
@@ -37,43 +36,38 @@ export default function Search({ searchParams }: SearchProps) {
 
   useEffect(() => {
     filterMovies();
-  }, [searchParams, refInput.current?.value]);
+  }, [searchParams, refInput.current?.value, movies]);
 
   function filterMovies() {
-    const searchText = refInput.current?.value?.trim().toLowerCase() || '';   
-    
+    const searchText = refInput.current?.value?.trim().toLowerCase() || '';
+
     const filteredByText = searchText
       ? movies.filter((movie: Movie) => movie.title.toLowerCase().includes(searchText))
-      : movies;      
-      
-    const filterByRating = searchParams.rating?.length
-      ? filteredByText.filter((movie: Movie) => searchParams.rating?.includes(String(movie.ratings)))
-      : filteredByText;
-    
-    const filterByGenre = searchParams.genre?.length
-      ? filterByRating.filter((movie: Movie) => searchParams.genre?.includes(movie.genre.toLowerCase()))
-      : filterByRating;
+      : movies;
+
+    const filterByRating =
+      searchParams.rating?.length && !searchParams.rating?.includes('any')
+        ? filteredByText.filter((movie: Movie) => searchParams.rating?.includes(String(movie.ratings)))
+        : filteredByText;
+
+    const filterByGenre =
+      searchParams.genre?.length && !searchParams.genre?.includes('any genre')
+        ? filterByRating.filter((movie: Movie) => searchParams.genre?.includes(movie.genre.toLowerCase()))
+        : filterByRating;
 
     setFilteredMovies(filterByGenre);
   }
 
-
   return (
     <SearchWrapper>
-      <Input
-        ref={refInput}
-        placeholder="Enter movie name"
-        onChange={filterMovies}
-        onFocus={() => setIsInFocus(true)}
-        // onBlur={() => setIsInFocus(false)}
-      />
+      <Input ref={refInput} placeholder="Enter movie name" onChange={filterMovies} onFocus={() => setIsInFocus(true)} />
       {isInFocus && (
         <MoviesContainer>
           {filteredMovies.map((elem: Movie) => (
             <MovieItem item={elem} key={elem.id}></MovieItem>
           ))}
         </MoviesContainer>
-       )}
+      )}
     </SearchWrapper>
   );
 }
