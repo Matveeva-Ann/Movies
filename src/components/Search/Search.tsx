@@ -5,6 +5,7 @@ import { Input, MoviesContainer, SearchWrapper } from './Search.style';
 import { getMovies } from '../../api/movies';
 import { Movie } from '../../types/movie';
 import MovieItem from '../MovieItem/MovieItem';
+import NotFound from '../notFound/NotFound';
 
 interface SearchParams {
   rating?: Array<string>;
@@ -63,6 +64,7 @@ export default function Search({ searchParams }: SearchProps) {
       <Input ref={refInput} placeholder="Enter movie name" onChange={filterMovies} onFocus={() => setIsInFocus(true)} />
       {isInFocus && (
         <MoviesContainer>
+          {filteredMovies.length === 0 && <NotFound></NotFound>}
           {filteredMovies.map((elem: Movie) => (
             <MovieItem item={elem} key={elem.id}></MovieItem>
           ))}
