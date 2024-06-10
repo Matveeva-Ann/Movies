@@ -6,7 +6,6 @@ import { getMovies } from '../../api/movies';
 import { Movie } from '../../types/movie';
 import MovieItem from '../MovieItem/MovieItem';
 import NotFound from '../notFound/NotFound';
-
 interface SearchParams {
   rating?: Array<string>;
   genre?: Array<string>;
@@ -21,6 +20,7 @@ export default function Search({ searchParams }: SearchProps) {
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
   const [isInFocus, setIsInFocus] = useState(false);
   const refInput = useRef<HTMLInputElement>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     fetchMovies();
@@ -34,6 +34,16 @@ export default function Search({ searchParams }: SearchProps) {
       console.log(e);
     }
   }
+
+  function debouncedCallback(callback:() => void, delay: number) {    
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      callback();
+    }, delay);
+  }
+
 
   useEffect(() => {
     filterMovies();
@@ -61,7 +71,7 @@ export default function Search({ searchParams }: SearchProps) {
 
   return (
     <SearchWrapper>
-      <Input ref={refInput} placeholder="Enter movie name" onChange={filterMovies} onFocus={() => setIsInFocus(true)} />
+      <Input ref={refInput} placeholder="Enter movie name" onChange={()=>debouncedCallback(filterMovies, 500)} onFocus={() => setIsInFocus(true)} />
       {isInFocus && (
         <MoviesContainer>
           {filteredMovies.length === 0 && <NotFound></NotFound>}
