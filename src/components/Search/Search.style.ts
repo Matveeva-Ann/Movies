@@ -16,4 +16,5 @@ export const Input = styled.input`
 
 export const MoviesContainer = styled.div`
   border: 1px solid #dadada;
+  background-color: #fff;
 `;

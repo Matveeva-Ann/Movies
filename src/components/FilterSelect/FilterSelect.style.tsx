@@ -10,6 +10,7 @@ export const Option = styled.div`
   position: absolute;
   padding: 12px;
   border: 1px solid #dadada;
+  background-color: #fff;
   animation: showOption 450ms ease-in-out forwards;
   user-select: none;
 
