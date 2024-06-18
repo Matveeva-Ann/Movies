@@ -1,1 +1,1 @@
-export const genreArr = ['any', 'action', 'comedy', 'drama', 'thriller'];
+export const genreArr: string[] = ['any', 'action', 'comedy', 'drama', 'thriller'];

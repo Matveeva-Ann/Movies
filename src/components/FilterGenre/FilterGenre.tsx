@@ -23,14 +23,14 @@ export default function FilterGenre({ setIsGenreOpen, isGenreOpen }: FilterGenre
   return (
     <FilterSelect selectName="Genre" isOpen={isGenreOpen} setIsOpen={setIsGenreOpen}>
       <form onChange={e => handleCheckboxChange(e)}>
-        {genreArr.map(genre => (
+        {genreArr.map((genre: string) => (
           <div key={genre}>
             <input
               type="checkbox"
               id={genre}
               name={genre}
               value={genre}
-              defaultChecked={selectedGenres?.value.includes(genre)}
+              defaultChecked={selectedGenres.value.includes(genre as never)}
             />
             <GenreLabel htmlFor={genre}>{genre}</GenreLabel>
           </div>

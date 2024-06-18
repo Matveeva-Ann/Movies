@@ -23,12 +23,12 @@ export default function FilterRating({setIsRatingOpen, isRatingOpen}: FilterRati
     <FilterSelect selectName="Rating" isOpen={isRatingOpen} setIsOpen={setIsRatingOpen}>
       <form id='ratingForm' onChange={(e)=>handleCheckboxChange(e)}>
           <div>
-            <input type="checkbox" id='checkbox' name='any' value='any' defaultChecked={selectedRating?.value.includes('any')}/>
+            <input type="checkbox" id='checkbox' name='any' value='any' defaultChecked={selectedRating?.value.includes('any' as never)}/>
             <label htmlFor='checkbox'>Any rating</label>
           </div>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => (
           <div key={item}>
-            <input type="checkbox" id={`checkbox-${item}`} name={`checkbox-${item}`} value={item} defaultChecked={selectedRating?.value.includes(String(item))}/>
+            <input type="checkbox" id={`checkbox-${item}`} name={`checkbox-${item}`} value={item} defaultChecked={selectedRating?.value.includes(String(item) as never)}/>
             <label htmlFor={`checkbox-${item}`}>{generateStars(item)}</label>
           </div>
         ))}

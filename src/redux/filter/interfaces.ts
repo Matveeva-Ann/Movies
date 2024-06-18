@@ -8,5 +8,5 @@ export enum FilterType {
 export interface Filter {
   type: FilterType;
   fieldName: keyof Movie;
-  value: string | [];
+  value: string | string[];
 }
