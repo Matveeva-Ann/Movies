@@ -1,0 +1,1 @@
+export const genreArr = ['any', 'action', 'comedy', 'drama', 'thriller'];
